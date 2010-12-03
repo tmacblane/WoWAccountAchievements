@@ -1,0 +1,10 @@
+<p>Achievements</p>
+<ul>
+  <% @uniqueAchievements.each do |achievement| %>
+  <li>
+    <% @achievement = Achievement.search_for_achievement_by_id(achievement.achievement_id) %>
+    <%= "#{achievement.achievement_id} #{@achievement[0].name} #{@achievement[0].points}" %>
+  </li>
+  <% end %>
+</ul>
+

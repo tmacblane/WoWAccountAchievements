@@ -126,7 +126,9 @@ class GetAchieves
     end
   end
 
-  get_achieves_by_character_name("Immutable", "Illidan")
+  get_achieves_by_character_name("Trillionn", "Illidan")
+  get_achieves_by_character_name("Mosch", "Illidan")
+  get_achieves_by_character_name("Detartrated", "Illidan")
 
   #image_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[2]/img"
   #image_url = "http://www.wowarmory.com/wow-icons/_images/51x51/achievement_quests_completed_08.jpg"

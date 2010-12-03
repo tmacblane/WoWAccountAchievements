@@ -58,9 +58,8 @@ class CharacterAchievement < WowAchievementConnection
     end
 
     puts @total
+    return @uniqueAchievements
   end
 
-  get_unique_achievements("1, 2, 3")
-  get_unique_achievements("4, 5, 6")
-  get_unique_achievements("7, 8, 9, 10")
+  #get_unique_achievements("1, 2, 3")
 end
