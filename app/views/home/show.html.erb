@@ -1,10 +1,16 @@
-<p>Achievements</p>
-<ul>
-  <% @uniqueAchievements.each do |achievement| %>
-  <li>
-    <% @achievement = Achievement.search_for_achievement_by_id(achievement.achievement_id) %>
-    <%= "#{achievement.achievement_id} #{@achievement[0].name} #{@achievement[0].points}" %>
-  </li>
-  <% end %>
-</ul>
-
+<% @uniqueAchievements.each do |achievement| %>
+<% @achievement = Achievement.search_for_achievement_by_id(achievement.achievement_id) %>
+<div id="achievement">
+    <div id="achv_left">
+      <div id="achv_img"></div>
+    </div>
+    <div id="achv_cntr">
+        <div id="achv_name"><b><%= "#{@achievement[0].name}" %></b></div>
+        <div id="achv_desc"><%= "#{@achievement[0].description}" %></div>
+        <div id="achv_date"></div>
+    </div>
+    <div id="achv_right">
+        <div id="achv_pts"><%= "#{@achievement[0].points}" %></div>
+    </div>
+</div>
+<% end %>

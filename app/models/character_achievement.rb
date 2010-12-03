@@ -48,9 +48,13 @@ class CharacterAchievement < WowAchievementConnection
     @uniqueAchievements = CharacterAchievement.find(:all,
             :select => "DISTINCT(achievement_id)",
             :conditions => "character_id IN (#{characterIDs})")
+    return @uniqueAchievements
+  end
+
+  def self.calculate_total_achievement_points(characterIDs)
+    @uniqueAchievements = get_unique_achievements(characterIDs)
 
     @total = 0
-    
     @uniqueAchievements.each do |points|
       @achievement = Achievement.search_for_achievement_by_id(points.achievement_id)
 
@@ -58,8 +62,13 @@ class CharacterAchievement < WowAchievementConnection
     end
 
     puts @total
-    return @uniqueAchievements
+    return @total
   end
 
-  #get_unique_achievements("1, 2, 3")
+  calculate_total_achievement_points("1, 2, 3, 4") #xaphod, trill, mosch, tard
+  calculate_total_achievement_points("5, 6, 7") #loganvi, kanban, loganluna
+  calculate_total_achievement_points("8, 9 ,10, 11") #morvas, savrom, marphadin, drante
+  calculate_total_achievement_points("12, 13, 14") #tuple, immutable, rexml
+
+  calculate_total_achievement_points("5")
 end

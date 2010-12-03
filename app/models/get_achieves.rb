@@ -27,21 +27,33 @@ class GetAchieves
       characterAchievementFrame = Nokogiri::HTML(open(armoryURL(character, realm, category.category_id))) #set the page
       points = 0
       title = ""
-      description = ""
+      description = ""     
 
       #Do for Completed Achieves
       characterAchievementFrame.xpath("//div/div/div[starts-with(@id, 'ach')][@class='achievement']").each do |achieveID|
+        title_xpath = "//div[@id='#{achieveID['id']}']/div[@class='achv_title']"
+        description_xpath = "//div[@id='#{achieveID['id']}']/div[@class='achv_desc']"
+        date_xpath = "//div[@id='#{achieveID['id']}']/div[@class='achv_date']"
+        achievement_value_xpath = "//div[@id='#{achieveID['id']}']/div[@class='pointshield']/div"
+        image_xpath = "//div[@id='#{achieveID['id']}']/div[@class='firsts_icon'][starts-with(@style, 'background-image')]"
         @achievement = Achievement.search_for_achievement("#{achieveID['id']}") #Find completed achievements
         @characterAchievements = CharacterAchievement.find_by_character_id(@character[0].id)
 
         #if achievement is feat
         if category.category_id == 81 #Check if achievement is a feat of strength
-          title_xpath = "//div[@id='#{achieveID['id']}']/div[2]"                    #set achievement title xpath
-          description_xpath = "//div[@id='#{achieveID['id']}']/div[3]"      #set achievement description xpath
-
-          points = 0    #set points to 0 - feats of strength have no points
+          points = ""    #set points to 0 - feats of strength have no points
           title = characterAchievementFrame.xpath(title_xpath).inner_html   #update title variable to inner_html text
           description = characterAchievementFrame.xpath(description_xpath).inner_html   #update description variable to inner_html text
+
+          if @achievement.to_s == ""  #check if achievement is in database, if not add
+            Achievement.add_achievement("#{achieveID['id']}", category.category_id, points, title, description)
+          else                                            #update existing achievement attributes if any are null
+            Achievement.update_achievement_attributes("#{achieveID['id']}", category.category_id, points, title, description, "1")
+          end
+
+          image = characterAchievementFrame.xpath(image_xpath)
+          puts image
+
         else
           points_total = 0
           #Check to see if character achievement has criteria
@@ -67,11 +79,7 @@ class GetAchieves
                 Achievement.add_achievement("#{criteria['id']}", category.category_id, points, title, description)
               else                                            #update existing achievement attributes if any are null
                 Achievement.update_criteria_achievement_attributes("#{criteria['id']}", category.category_id, points, title, "1")
-              end
-
-              title_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[3]"
-              description_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[4]"
-              achievement_value_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[1]/div"
+              end              
 
               points = characterAchievementFrame.xpath(achievement_value_xpath).inner_html.to_i - points_total
               title = characterAchievementFrame.xpath(title_xpath).inner_html
@@ -95,10 +103,6 @@ class GetAchieves
               end
             end
           end
-
-          title_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[3]"
-          description_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[4]"
-          achievement_value_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[1]/div"
 
           points = characterAchievementFrame.xpath(achievement_value_xpath).inner_html.to_i - points_total
           title = characterAchievementFrame.xpath(title_xpath).inner_html
@@ -126,9 +130,18 @@ class GetAchieves
     end
   end
 
-  get_achieves_by_character_name("Trillionn", "Illidan")
-  get_achieves_by_character_name("Mosch", "Illidan")
-  get_achieves_by_character_name("Detartrated", "Illidan")
+  get_achieves_by_character_name("Loganvi", "Illidan")
+  get_achieves_by_character_name("Kanban", "Illidan")
+  get_achieves_by_character_name("Loganluna", "Illidan")
+
+  get_achieves_by_character_name("Morvas", "Illidan")
+  get_achieves_by_character_name("Savrom", "Illidan")
+  get_achieves_by_character_name("Marphadin", "Illidan")
+  get_achieves_by_character_name("Drante", "Illidan")
+
+  get_achieves_by_character_name("Tuple", "Illidan")
+  get_achieves_by_character_name("Immutable", "Illidan")
+  get_achieves_by_character_name("Rexml", "Illidan")
 
   #image_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[2]/img"
   #image_url = "http://www.wowarmory.com/wow-icons/_images/51x51/achievement_quests_completed_08.jpg"
