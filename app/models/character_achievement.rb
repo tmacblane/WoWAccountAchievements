@@ -48,6 +48,7 @@ class CharacterAchievement < WowAchievementConnection
     @uniqueAchievements = CharacterAchievement.find(:all,
             :select => "DISTINCT(achievement_id)",
             :conditions => "character_id IN (#{characterIDs})")
+
     return @uniqueAchievements
   end
 
@@ -65,10 +66,13 @@ class CharacterAchievement < WowAchievementConnection
     return @total
   end
 
-  calculate_total_achievement_points("1, 2, 3, 4") #xaphod, trill, mosch, tard
-  calculate_total_achievement_points("5, 6, 7") #loganvi, kanban, loganluna
-  calculate_total_achievement_points("8, 9 ,10, 11") #morvas, savrom, marphadin, drante
-  calculate_total_achievement_points("12, 13, 14") #tuple, immutable, rexml
+  #calculate_total_achievement_points("1, 2, 3, 4") #xaphod, trill, mosch, tard
+  #calculate_total_achievement_points("5, 6, 7, 16") #loganvi, kanban, loganluna, eisenfaust
+  #calculate_total_achievement_points("8, 9 ,10, 11") #morvas, savrom, marphadin, drante
+  #calculate_total_achievement_points("12, 13, 14") #tuple, immutable, rexml
 
-  calculate_total_achievement_points("5")
+  #calculate_total_achievement_points("3")
+  #calculate_total_achievement_points("5")
+  #calculate_total_achievement_points("16")
+
 end

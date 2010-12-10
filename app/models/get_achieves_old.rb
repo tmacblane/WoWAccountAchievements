@@ -10,7 +10,7 @@ require 'character_achievement.rb'
 class GetAchieves
 
   def self.armoryURL(character, realm, categoryID)
-    "http://www.wowarmory.com/character-achievements.xml?r=#{realm}&n=#{character}&c=#{categoryID}"
+    "http://us.battle.net/wow/en/character/#{realm}/#{character}/achievement##{categoryID}"
   end
 
   def self.get_achieves_by_character_name(character, realm)
@@ -24,9 +24,6 @@ class GetAchieves
     @categories = Categories.find_categories_by_type(0)  #finds all categories of type 0 (achievements)
 
     @categories.each do |category|    #Loop through each root category id
-
-      puts category.category_id
-      puts armoryURL(character, realm, category.category_id)
       characterAchievementFrame = Nokogiri::HTML(open(armoryURL(character, realm, category.category_id))) #set the page
       points = 0
       title = ""
@@ -34,6 +31,10 @@ class GetAchieves
 
       #Do for Completed Achieves
       characterAchievementFrame.xpath("//div/div/div[starts-with(@id, 'ach')][@class='achievement']").each do |achieveID|
+
+        "//default:div[@id='achievement-list']/default:div[3]/default:div[@id='cat-96']/default:ul/default:li[1]/default:p/default:strong"
+        "//div[@id='achievement-list']/div[3]/div[@id='cat-96']/ul/li[1]/p/strong"
+
 
         title_xpath = "//div[@id='#{achieveID['id']}']/div[@class='achv_title']"
         description_xpath = "//div[@id='#{achieveID['id']}']/div[@class='achv_desc']"
@@ -56,6 +57,7 @@ class GetAchieves
           end
 
           image = characterAchievementFrame.xpath(image_xpath)
+          puts image
 
         else
           points_total = 0
@@ -82,7 +84,7 @@ class GetAchieves
                 Achievement.add_achievement("#{criteria['id']}", category.category_id, points, title, description)
               else                                            #update existing achievement attributes if any are null
                 Achievement.update_criteria_achievement_attributes("#{criteria['id']}", category.category_id, points, title, "1")
-              end
+              end              
 
               points = characterAchievementFrame.xpath(achievement_value_xpath).inner_html.to_i - points_total
               title = characterAchievementFrame.xpath(title_xpath).inner_html
@@ -126,14 +128,25 @@ class GetAchieves
 
           if @achievementID.to_s == ""  #if achievement id does not exist, add the achievement
             CharacterAchievement.create_character_achievement(@character[0].id, @achievement[0].id, 1)
-          end
+          end          
         end
+
       end
     end
   end
 
+  get_achieves_by_character_name("Loganvi", "Illidan")
+  get_achieves_by_character_name("Kanban", "Illidan")
+  get_achieves_by_character_name("Loganluna", "Illidan")
 
   get_achieves_by_character_name("Morvas", "Illidan")
+  get_achieves_by_character_name("Savrom", "Illidan")
+  get_achieves_by_character_name("Marphadin", "Illidan")
+  get_achieves_by_character_name("Drante", "Illidan")
+
+  get_achieves_by_character_name("Tuple", "Illidan")
+  get_achieves_by_character_name("Immutable", "Illidan")
+  get_achieves_by_character_name("Rexml", "Illidan")
 
   #image_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[2]/img"
   #image_url = "http://www.wowarmory.com/wow-icons/_images/51x51/achievement_quests_completed_08.jpg"
