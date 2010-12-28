@@ -24,9 +24,6 @@ class GetAchieves
     @categories = Categories.find_categories_by_type(0)  #finds all categories of type 0 (achievements)
 
     @categories.each do |category|    #Loop through each root category id
-
-      puts category.category_id
-      puts armoryURL(character, realm, category.category_id)
       characterAchievementFrame = Nokogiri::HTML(open(armoryURL(character, realm, category.category_id))) #set the page
       points = 0
       title = ""
@@ -43,7 +40,7 @@ class GetAchieves
         @achievement = Achievement.search_for_achievement("#{achieveID['id']}") #Find completed achievements
         @characterAchievements = CharacterAchievement.find_by_character_id(@character[0].id)
 
-        #if achievement is feat
+        #if achievement is a feat of strength
         if category.category_id == 81 #Check if achievement is a feat of strength
           points = ""    #set points to 0 - feats of strength have no points
           title = characterAchievementFrame.xpath(title_xpath).inner_html   #update title variable to inner_html text
@@ -133,7 +130,9 @@ class GetAchieves
   end
 
 
+  #get_achieves_by_character_name("Mosch", "Illidan")
   get_achieves_by_character_name("Morvas", "Illidan")
+  get_achieves_by_character_name("Loganvi", "Illidan")
 
   #image_xpath = "//div/div/div[@id='#{achieveID['id']}']/div[2]/img"
   #image_url = "http://www.wowarmory.com/wow-icons/_images/51x51/achievement_quests_completed_08.jpg"

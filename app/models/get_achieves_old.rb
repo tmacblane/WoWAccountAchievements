@@ -7,7 +7,7 @@ require 'character.rb'
 require 'realm.rb'
 require 'character_achievement.rb'
 
-class GetAchieves
+class GetAchievesOld
 
   def self.armoryURL(character, realm, categoryID)
     "http://us.battle.net/wow/en/character/#{realm}/#{character}/achievement##{categoryID}"

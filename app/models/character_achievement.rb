@@ -30,7 +30,7 @@ class CharacterAchievement < WowAchievementConnection
   end
 
   def self.get_achievement_points_by_character(characterID)
-    @characterAchievements = CharacterAchievement.find(:all,
+    @characterAchievements = self.find(:all,
             :conditions => "character_id = '#{characterID}'")
 
     @total = 0
@@ -71,8 +71,8 @@ class CharacterAchievement < WowAchievementConnection
   #calculate_total_achievement_points("8, 9 ,10, 11") #morvas, savrom, marphadin, drante
   #calculate_total_achievement_points("12, 13, 14") #tuple, immutable, rexml
 
-  #calculate_total_achievement_points("3")
-  #calculate_total_achievement_points("5")
-  #calculate_total_achievement_points("16")
+  calculate_total_achievement_points("3")
+  calculate_total_achievement_points("5")
+  calculate_total_achievement_points("8")
 
 end
